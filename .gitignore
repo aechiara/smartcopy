@@ -1,0 +1,4 @@
+smartcopy
+src/smartcopy
+src/*.d
+src/*.o
