@@ -8,7 +8,7 @@
 void printUsage(char* execName)
 {
 	printf("%s - version %d.%d\n", EXEC_NAME, MAJOR_VERSION, MINOR_VERSION);
-	printf("\tUsage: %s -o <original_file> -d <destination_file>\n", execName);
+	printf("\tUsage: %s -f -o <original_file> -d <destination_file>\n", execName);
 }
 
 long getFileSize(FILE *fileDescriptor)
