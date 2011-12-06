@@ -24,13 +24,14 @@ long getFileSize(FILE *fileDescriptor)
 	return ( fileSize );
 }
 
-int calcPercCompleted(long parcial, long total)
+double calcPercCompleted(long parcial, long total)
 {
 	double perc = 0.0f;
 
-	perc = (100 * parcial) / total;
+	perc = (double)((100.0f * parcial) / (double)total);
+	//printf("\n parcial: [%ld] - total [%ld] - perc: [%3.2f]\n", parcial, total, perc);
 
-	return ( (int) perc );
+	return ( perc );
 }
 
 #endif

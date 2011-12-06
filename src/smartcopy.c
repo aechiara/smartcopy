@@ -12,7 +12,7 @@ int main(int argc, char **argv)
 	char destFileName[FILENAME_MAX];
 	FILE *oFile, *dFile;
 	char* buffer;
-	long oFSize, dFSize, totalWrited;
+	long oFSize, dFSize, totalWrited, tmpCount;
 	size_t fret;
 
 	int isForce = 0;
@@ -91,21 +91,23 @@ int main(int argc, char **argv)
 
 	// print sumary
 	printf("Original File [%s] Size is [%ld]\n", origFileName, oFSize);
-	printf("Destination File [%s] Size is [%ld] - [%d%%] completed\n", destFileName, dFSize, calcPercCompleted(totalWrited, oFSize));
+	printf("Destination File [%s] Size is [%ld] - [%3.2f%%] completed\n", destFileName, dFSize, calcPercCompleted(totalWrited, oFSize));
 	printf("Force Flush is [%s]\n", (isForce == 1 ? "TRUE" : "FALSE"));
 	printf("press enter to continue ...\n");
 	getchar();
 
 	buffer = (char *)malloc(sizeof(char) * BUFFER_SIZE);
 	
+	fret = 0;
+	tmpCount = 0;
 	while ( ! feof(oFile) )
 	{
 		memset(buffer, 0, sizeof(buffer));
 		fret = fread(buffer, 1, BUFFER_SIZE, oFile);
-		fret = fwrite(buffer, 1, fret, dFile);
-		totalWrited += fret;
+		tmpCount = fwrite(buffer, 1, fret, dFile);
+		totalWrited += tmpCount;
 
-		printf("\rcopied [%ld] from [%ld] - [%d]%% completed\t\t", totalWrited, oFSize, calcPercCompleted(totalWrited, oFSize));
+		printf("copied [%ld] from [%ld] - [%3.2f]%% completed\t\t\t\r", totalWrited, oFSize, calcPercCompleted(totalWrited, oFSize));
 
 		if ( isForce )
 		{
