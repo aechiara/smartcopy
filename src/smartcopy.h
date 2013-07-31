@@ -8,7 +8,7 @@
 void printUsage(char* execName)
 {
 	printf("%s - version %d.%d\n", EXEC_NAME, MAJOR_VERSION, MINOR_VERSION);
-	printf("\tUsage: %s -f -o <original_file> -d <destination_file>\n", execName);
+	printf("\tUsage: %s -f -y -o <original_file> -d <destination_file>\n", execName);
 }
 
 long getFileSize(FILE *fileDescriptor)
@@ -28,8 +28,11 @@ double calcPercCompleted(long parcial, long total)
 {
 	double perc = 0.0f;
 
-	perc = (double)((100.0f * parcial) / (double)total);
-	//printf("\n parcial: [%ld] - total [%ld] - perc: [%3.2f]\n", parcial, total, perc);
+	if ( 0L < parcial )
+	{
+		perc = (double)((100.0f * parcial) / (double)total);
+		//printf("\rparcial: [%ld] - total [%ld] - perc: [%3.2f]\t\t\t\t", parcial, total, perc);
+	}
 
 	return ( perc );
 }

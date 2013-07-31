@@ -15,6 +15,7 @@ int main(int argc, char **argv)
 	long oFSize, dFSize, totalWrited, tmpCount;
 	size_t fret;
 
+	int DO_NOT_CONFIRM = 0;
 	int isForce = 0;
 
 	if ( argc < 2 )
@@ -23,7 +24,7 @@ int main(int argc, char **argv)
 		exit(-1);
 	}
 
-	while ((c = getopt(argc, argv, "o:d:f")) != -1) 
+	while ((c = getopt(argc, argv, "o:d:fy")) != -1) 
 	{
 		switch (c) 
 		{
@@ -37,6 +38,9 @@ int main(int argc, char **argv)
 				break;
 			case 'f':
 				isForce = 1;
+				break;
+			case 'y':
+				DO_NOT_CONFIRM = 1;
 				break;
 			case '?':
 				fprintf(stderr, "Unrecognized option  \n");
@@ -57,7 +61,7 @@ int main(int argc, char **argv)
 
 	if (( oFile = fopen(origFileName, "r")) == NULL )
 	{
-		fprintf(stderr, "Impossible to open destination File [%s]\n", origFileName);
+		fprintf(stderr, "Impossible to open original File [%s]\n", origFileName);
 		exit(-2);
 	}
 
@@ -93,13 +97,22 @@ int main(int argc, char **argv)
 	printf("Original File [%s] Size is [%ld]\n", origFileName, oFSize);
 	printf("Destination File [%s] Size is [%ld] - [%3.2f%%] completed\n", destFileName, dFSize, calcPercCompleted(totalWrited, oFSize));
 	printf("Force Flush is [%s]\n", (isForce == 1 ? "TRUE" : "FALSE"));
-	printf("press enter to continue ...\n");
-	getchar();
+	
+	if ( ! DO_NOT_CONFIRM )
+	{
+		printf("press enter to continue ...\n");
+		getchar();
+	}
+	else
+	{
+		printf("Do not Confirm is [TRUE]\n");
+	}
 
 	buffer = (char *)malloc(sizeof(char) * BUFFER_SIZE);
 	
 	fret = 0;
 	tmpCount = 0;
+
 	while ( ! feof(oFile) )
 	{
 		memset(buffer, 0, sizeof(buffer));
@@ -107,7 +120,7 @@ int main(int argc, char **argv)
 		tmpCount = fwrite(buffer, 1, fret, dFile);
 		totalWrited += tmpCount;
 
-		printf("copied [%ld] from [%ld] - [%3.2f]%% completed\t\t\t\r", totalWrited, oFSize, calcPercCompleted(totalWrited, oFSize));
+		printf("\rcopied [%ld] from [%ld] - [%3.2f]%% completed\t\t\t\t", totalWrited, oFSize, calcPercCompleted(totalWrited, oFSize));
 
 		if ( isForce )
 		{
