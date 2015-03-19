@@ -8,4 +8,5 @@ to another, but it can be also used in NFSs or even on the same machine where yo
 -f: force flush to every write on disk
 
 
-Usage: ./smartcopy -f -y -o original_file -d destination_file
+Usage: 
+`./smartcopy -f -y -o original_file -d destination_file`
